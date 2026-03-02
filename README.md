@@ -21,8 +21,8 @@ I deployed **Wazuh SIEM** to monitor a Windows 10 endpoint and used **Kali Linux
 ### 🕵️‍♂️ Analyst View: Deep Dive into Logs
 Below is the detailed analysis of the captured security event in Wazuh dashboard.
 
-![Wazuh Log Analysis](<img width="867" height="990" alt="Wazuh-BruteForce-Log-Analysis-EventID4625" src="https://github.com/user-attachments/assets/b82416b8-f024-4130-aef1-6a02ddca8b17" />
-)
+![Wazuh Log Analysis] <img width="867" height="990" alt="Wazuh-BruteForce-Log-Analysis-EventID4625" src="https://github.com/user-attachments/assets/0e96dc21-ce11-4678-93fd-92d798feb79d" />
+
 
 **Technical Breakdown of the Alert:**
 * **Event ID:** `4625` (An account failed to log on).
