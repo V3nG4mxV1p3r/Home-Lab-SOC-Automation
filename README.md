@@ -36,3 +36,22 @@ Below is the detailed analysis of the captured security event in Wazuh dashboard
 * **Log Analysis:** Interpreting Windows Security Events (Event Viewer).
 * **Virtualization:** Managing isolated lab environments with VirtualBox.
 * **Blue Team Operations:** From attack simulation to log visibility.
+
+* ---
+
+## 🔍 Phase 2: Telemetry & Forensic Visibility (Sysmon)
+
+Standard Windows logs weren't enough, so I integrated **Sysmon** to get deeper visibility into system activities.
+
+### Test Case: Detecting Encoded PowerShell Execution
+Attackers often use Base64 encoding to hide their malicious commands. I simulated this by running an encoded command in the Windows 10 VM.
+
+* **Action:** Executed a PowerShell script using `-EncodedCommand`.
+* **Detection:** Sysmon captured the **Event ID 1 (Process Creation)**.
+* **Analysis:** Even though the command was obfuscated, the Sysmon logs in Wazuh allowed me to see the full command-line arguments and the parent process.
+
+#### Evidence of Detection:
+![Sysmon PowerShell Log]<img width="1099" height="691" alt="sysmon_powershell_log" src="https://github.com/user-attachments/assets/c369deb1-d193-41ba-bbb1-f8c72f86d3db" />
+
+
+> **Analyst Note:** This level of visibility is crucial for detecting "Living off the Land" (LotL) attacks where legitimate tools like PowerShell are used for malicious purposes.
