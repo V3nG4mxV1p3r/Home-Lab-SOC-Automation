@@ -1,2 +1,38 @@
-# Home-Lab-SOC-Automation
-Building a SOC environment with Wazuh, Windows 10, and Kali Linux. Attack simulation &amp; Log Analysis.
+# 🛡️ SOC Home Lab: Wazuh SIEM & Attack Detection
+
+## 🚀 Project Overview
+In this project, I built a fully functional **Security Operations Center (SOC)** environment to simulate real-world cyber attacks and practice **Threat Detection & Incident Response**.
+
+I deployed **Wazuh SIEM** to monitor a Windows 10 endpoint and used **Kali Linux** to execute offensive operations (Network Scanning & Brute Force), successfully detecting and analyzing the resulting security logs.
+
+## 🏗️ Architecture
+* **SIEM:** Wazuh Server (Ubuntu Server 24.04) running on VirtualBox.
+* **Victim Endpoint:** Windows 10 Enterprise (with Wazuh Agent).
+* **Attacker:** Kali Linux (Nmap, Hydra, Manual Scripts).
+* **Network:** Isolated NAT Network (`10.0.2.0/24`) for safe simulation.
+
+## ⚡ Scenarios & Detection
+
+### Scenario 1: Brute Force Attack Detection
+* **Attack:** Attempted unauthorized RDP/Login access using incorrect passwords multiple times.
+* **Detection:** Wazuh triggered `Authentication failure` alerts (Event ID 4625).
+* **Analysis:** Identified the source of the attack and the targeted usernames.
+
+### 🕵️‍♂️ Analyst View: Deep Dive into Logs
+Below is the detailed analysis of the captured security event in Wazuh dashboard.
+
+![Wazuh Log Analysis](<img width="867" height="990" alt="Wazuh-BruteForce-Log-Analysis-EventID4625" src="https://github.com/user-attachments/assets/b82416b8-f024-4130-aef1-6a02ddca8b17" />
+)
+
+**Technical Breakdown of the Alert:**
+* **Event ID:** `4625` (An account failed to log on).
+* **Significance:** Multiple occurrences of this event within a short timeframe indicate a **Brute Force** attempt.
+* **Target User:** `vboxuser` (The attacker attempted to guess the password for this specific account).
+* **Logon Type:** `2` (Interactive). This indicates the attack was performed locally on the machine (simulated via manual entry at the lock screen).
+* **Outcome:** The SIEM successfully parsed the raw Windows Event log and alerted the SOC dashboard instantly.
+
+## 🔧 Skills Demonstrated
+* **SIEM Configuration:** Deployment and agent integration of Wazuh.
+* **Log Analysis:** Interpreting Windows Security Events (Event Viewer).
+* **Virtualization:** Managing isolated lab environments with VirtualBox.
+* **Blue Team Operations:** From attack simulation to log visibility.
