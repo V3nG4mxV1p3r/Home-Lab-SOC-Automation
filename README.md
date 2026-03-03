@@ -62,6 +62,18 @@ Standard logs are noisy. To build a true early-warning system, I created custom 
 **Scenario: Detecting Malicious Persistence (T1053.005)**
 Attackers often use Scheduled Tasks to maintain a foothold in the system. I simulated this by creating a hidden task meant to run with SYSTEM privileges upon logon.
 
+🛠️ The Custom Rule (Behind the Scenes):
+I crafted an XML rule to catch the exact command-line arguments:
+
+<rule id="100002" level="12">
+  <if_group>sysmon</if_group>
+  <field name="win.eventdata.commandLine">schtasks.exe</field>
+  <field name="win.eventdata.commandLine">/create</field>
+  <mitre>
+    <id>T1053.005</id>
+  </mitre>
+</rule>
+
 **The Action:**
 `schtasks /create /tn "SOC_TEST" /tr "calc.exe" /sc onlogon /ru System`
 
