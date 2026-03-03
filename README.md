@@ -55,3 +55,21 @@ Attackers often use Base64 encoding to hide their malicious commands. I simulate
 
 
 > **Analyst Note:** This level of visibility is crucial for detecting "Living off the Land" (LotL) attacks where legitimate tools like PowerShell are used for malicious purposes.
+>
+> ### 🚨 Phase 3: Custom Detection Rules & Persistence Hunting
+Standard logs are noisy. To build a true early-warning system, I created custom Wazuh rules to detect specific MITRE ATT&CK techniques.
+
+**Scenario: Detecting Malicious Persistence (T1053.005)**
+Attackers often use Scheduled Tasks to maintain a foothold in the system. I simulated this by creating a hidden task meant to run with SYSTEM privileges upon logon.
+
+**The Action:**
+`schtasks /create /tn "SOC_TEST" /tr "calc.exe" /sc onlogon /ru System`
+
+**The Detection:**
+I wrote a custom Level 12 rule in Wazuh to immediately flag any `schtasks.exe` execution containing the `/create` parameter.
+
+<img width="960" height="586" alt="schtasks_exe" src="https://github.com/user-attachments/assets/85c076fe-fb6f-4c3b-b3a4-f02c4882b4df" />
+
+
+**Analyst Insight:**
+By mapping the custom rule to MITRE ATT&CK ID **T1053.005**, the SOC team instantly understands the intent of the attacker (Persistence) without manually deciphering the raw logs.
