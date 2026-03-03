@@ -68,18 +68,8 @@ Attackers often use Scheduled Tasks to maintain a foothold in the system. I simu
 **The Detection:**
 I wrote a custom Level 12 rule in Wazuh to immediately flag any `schtasks.exe` execution containing the `/create` parameter.
 
-<img width="960" height="586" alt="schtasks_exe" src="https://github.com/user-attachments/assets/85c076fe-fb6f-4c3b-b3a4-f02c4882b4df" />
-🛠️ The Custom Rule (Behind the Scenes):
-I crafted an XML rule to catch the exact command-line arguments:
+<img width="960" height="586" alt="schtasks_exe" src="https://github.com/user-attachments/assets/b886afb1-22c3-45e1-8521-7a70058a7e9e" />
 
-<rule id="100002" level="12">
-  <if_group>sysmon</if_group>
-  <field name="win.eventdata.commandLine">schtasks.exe</field>
-  <field name="win.eventdata.commandLine">/create</field>
-  <mitre>
-    <id>T1053.005</id>
-  </mitre>
-</rule>
 
 **Analyst Insight:**
 By mapping the custom rule to MITRE ATT&CK ID **T1053.005**, the SOC team instantly understands the intent of the attacker (Persistence) without manually deciphering the raw logs.
