@@ -62,6 +62,13 @@ Standard logs are noisy. To build a true early-warning system, I created custom 
 **Scenario: Detecting Malicious Persistence (T1053.005)**
 Attackers often use Scheduled Tasks to maintain a foothold in the system. I simulated this by creating a hidden task meant to run with SYSTEM privileges upon logon.
 
+**The Action:**
+`schtasks /create /tn "SOC_TEST" /tr "calc.exe" /sc onlogon /ru System`
+
+**The Detection:**
+I wrote a custom Level 12 rule in Wazuh to immediately flag any `schtasks.exe` execution containing the `/create` parameter.
+
+<img width="960" height="586" alt="schtasks_exe" src="https://github.com/user-attachments/assets/85c076fe-fb6f-4c3b-b3a4-f02c4882b4df" />
 🛠️ The Custom Rule (Behind the Scenes):
 I crafted an XML rule to catch the exact command-line arguments:
 
@@ -73,15 +80,6 @@ I crafted an XML rule to catch the exact command-line arguments:
     <id>T1053.005</id>
   </mitre>
 </rule>
-
-**The Action:**
-`schtasks /create /tn "SOC_TEST" /tr "calc.exe" /sc onlogon /ru System`
-
-**The Detection:**
-I wrote a custom Level 12 rule in Wazuh to immediately flag any `schtasks.exe` execution containing the `/create` parameter.
-
-<img width="960" height="586" alt="schtasks_exe" src="https://github.com/user-attachments/assets/85c076fe-fb6f-4c3b-b3a4-f02c4882b4df" />
-
 
 **Analyst Insight:**
 By mapping the custom rule to MITRE ATT&CK ID **T1053.005**, the SOC team instantly understands the intent of the attacker (Persistence) without manually deciphering the raw logs.
