@@ -73,3 +73,28 @@ I wrote a custom Level 12 rule in Wazuh to immediately flag any `schtasks.exe` e
 
 **Analyst Insight:**
 By mapping the custom rule to MITRE ATT&CK ID **T1053.005**, the SOC team instantly understands the intent of the attacker (Persistence) without manually deciphering the raw logs.
+
+🎯 Scenario 2: Detecting Ingress Tool Transfer (MITRE T1105) via LOLBins
+Objective
+To detect and alert on malicious file downloads executed via built-in Windows binaries (LOLBins) such as PowerShell, simulating an attacker attempting to bring tools into the compromised environment stealthily.
+
+🥷 Attack Simulation (Red Team)
+Threat actors often use native tools to evade detection. The following command was executed on the Windows 10 endpoint to bypass execution policies and download a fake payload (svchost_update.exe) to the C:\Users\Public folder:
+powershell.exe -ExecutionPolicy Bypass -WindowStyle Hidden -Command "Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/wazuh/wazuh/master/LICENSE' -OutFile 'C:\Users\Public\svchost_update.exe'"
+
+🛡️ Detection Engineering (Blue Team)
+Sysmon was configured to capture Event ID 11 (File Create). The telemetry was forwarded to Wazuh. A custom rule was created to trigger a Critical (Level 12) alert when powershell.exe drops a specific suspicious executable.
+
+Custom Wazuh Rule (local_rules.xml):
+<rule id="100003" level="12">
+    <if_group>sysmon</if_group>
+    <field name="win.eventdata.image">powershell.exe</field>
+    <field name="win.eventdata.targetFilename">svchost_update.exe</field>
+    <description>CRITICAL: PowerShell Downloaded Suspicious Executable to Public Folder (T1105)</description>
+    <mitre>
+      <id>T1105</id>
+    </mitre>
+  </rule>
+
+  📸 Evidence of Detection
+  <img width="770" height="565" alt="alerts_wazuh" src="https://github.com/user-attachments/assets/a8599bf1-491a-4f10-aaf3-304983539e7a" />
