@@ -80,12 +80,13 @@ To detect and alert on malicious file downloads executed via built-in Windows bi
 
 🥷 Attack Simulation (Red Team)
 Threat actors often use native tools to evade detection. The following command was executed on the Windows 10 endpoint to bypass execution policies and download a fake payload (svchost_update.exe) to the C:\Users\Public folder:
-powershell.exe -ExecutionPolicy Bypass -WindowStyle Hidden -Command "Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/wazuh/wazuh/master/LICENSE' -OutFile 'C:\Users\Public\svchost_update.exe'"
+```powershell.exe -ExecutionPolicy Bypass -WindowStyle Hidden -Command "Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/wazuh/wazuh/master/LICENSE' -OutFile 'C:\Users\Public\svchost_update.exe'"```
 
 🛡️ Detection Engineering (Blue Team)
 Sysmon was configured to capture Event ID 11 (File Create). The telemetry was forwarded to Wazuh. A custom rule was created to trigger a Critical (Level 12) alert when powershell.exe drops a specific suspicious executable.
 
 Custom Wazuh Rule (local_rules.xml):
+```
 <rule id="100003" level="12">
     <if_group>sysmon</if_group>
     <field name="win.eventdata.image">powershell.exe</field>
@@ -95,6 +96,10 @@ Custom Wazuh Rule (local_rules.xml):
       <id>T1105</id>
     </mitre>
   </rule>
-
+```
   📸 Evidence of Detection
+  
   <img width="770" height="565" alt="alerts_wazuh" src="https://github.com/user-attachments/assets/a8599bf1-491a-4f10-aaf3-304983539e7a" />
+
+  <img width="627" height="370" alt="rule_level12" src="https://github.com/user-attachments/assets/1c2d83a1-07af-41e7-8b0a-f43570366cc7" />
+
