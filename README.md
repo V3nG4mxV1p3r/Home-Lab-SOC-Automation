@@ -153,3 +153,34 @@ Custom Wazuh Rule:
 ```
 <img width="960" height="467" alt="lsass_dump" src="https://github.com/user-attachments/assets/f58c263c-9c44-44fa-86b8-66e2b7f4fc47" />
 
+
+# 🎯 Scenario 5: Active Response (SOAR) - Automated Threat Mitigation
+Objective
+To evolve the SIEM from passive monitoring to active defense by automatically neutralizing a detected threat in real-time, drastically reducing the Mean Time to Respond (MTTR).
+
+## 🥷 The Threat (Trigger)
+A Level 12 CRITICAL alert triggered by an LSASS memory dump attempt (Rule ID: 100005), where the attacker attempts to output sensitive credentials to ```C:\Users\Public\lsass_dump.dmp.```
+ 
+## 🛡️ Response Engineering (Active Response)
+A custom batch script (```remove-threat.cmd```) was deployed to the Windows endpoint's active-response ```bin``` directory. The Wazuh Manager was configured to execute this script the exact millisecond the Rule ```ID 100005``` is triggered, forcefully deleting the dumped file before exfiltration can occur.
+
+Windows Remediation Script (```remove-threat.cmd```):
+```del /F /Q &quot;C:\Users\Public\lsass_dump.dmp&quot;```
+
+Wazuh Manager Configuration (```ossec.conf```):
+```
+&lt;command&gt;
+    &lt;name&gt;remove-threat&lt;/name&gt;
+    &lt;executable&gt;remove-threat.cmd&lt;/executable&gt;
+    &lt;timeout_allowed&gt;no&lt;/timeout_allowed&gt;
+  &lt;/command&gt;
+
+  &lt;active-response&gt;
+    &lt;command&gt;remove-threat&lt;/command&gt;
+    &lt;location&gt;local&lt;/location&gt;
+    &lt;rules_id&gt;100005&lt;/rules_id&gt;
+  &lt;/active-response&gt;
+```
+
+# 🏆 Conclusion
+This automated response successfully closes the loop on the attack lifecycle. The moment the ```rundll32.exe``` LOLBin attempts to extract the LSASS memory, the custom rule detects it, and the Active Response module instantly neutralizes the payload.
