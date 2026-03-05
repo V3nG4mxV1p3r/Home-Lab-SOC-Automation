@@ -169,17 +169,17 @@ Windows Remediation Script (```remove-threat.cmd```):
 
 Wazuh Manager Configuration (```ossec.conf```):
 ```
-&lt;command&gt;
-    &lt;name&gt;remove-threat&lt;/name&gt;
-    &lt;executable&gt;remove-threat.cmd&lt;/executable&gt;
-    &lt;timeout_allowed&gt;no&lt;/timeout_allowed&gt;
-  &lt;/command&gt;
+<command>
+<name>remove-threat</name>
+<executable>remove-threat.cmd</executable>
+<timeout_allowed>no</timeout_allowed>
+</command>
 
-  &lt;active-response&gt;
-    &lt;command&gt;remove-threat&lt;/command&gt;
-    &lt;location&gt;local&lt;/location&gt;
-    &lt;rules_id&gt;100005&lt;/rules_id&gt;
-  &lt;/active-response&gt;
+<active-response>
+<command>remove-threat</command>
+<location>local</location>
+<rules_id>100005</rules_id>
+<active-response>
 ```
 
 # 🏆 Conclusion
