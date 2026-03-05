@@ -103,3 +103,48 @@ Custom Wazuh Rule (local_rules.xml):
 
   <img width="627" height="370" alt="rule_level12" src="https://github.com/user-attachments/assets/1c2d83a1-07af-41e7-8b0a-f43570366cc7" />
 
+🎯 Scenario 3: Privilege Escalation via Windows Services (MITRE T1543.003)
+Objective
+To detect when an attacker uses native Windows tools (sc.exe) to create a persistent, malicious service running with SYSTEM privileges.
+
+🥷 Attack Simulation
+```sc.exe create &quot;Windows_Update_Backdoor&quot; binPath= &quot;C:\Users\Public\svchost_update.exe&quot; start= auto obj= &quot;LocalSystem&quot;```
+
+🛡️ Detection Engineering
+Default SIEM rules may ignore sc.exe to prevent false positives. A custom rule was created to trigger a Critical alert when sc.exe is specifically used to create a service.
+
+Custom Wazuh Rule:
+```
+&lt;rule id=&quot;100004&quot; level=&quot;12&quot;&gt;
+    &lt;if_group&gt;sysmon&lt;/if_group&gt;
+    &lt;field name=&quot;win.system.eventID&quot;&gt;1&lt;/field&gt;
+    &lt;field name=&quot;win.eventdata.image&quot;&gt;sc\.exe&lt;/field&gt;
+    &lt;field name=&quot;win.eventdata.commandLine&quot;&gt;create&lt;/field&gt;
+    &lt;description&gt;CRITICAL: Suspicious Service Creation via SC.EXE (Privilege Escalation - T1543.003)&lt;/description&gt;
+    &lt;mitre&gt;
+      &lt;id&gt;T1543.003&lt;/id&gt;
+    &lt;/mitre&gt;
+  &lt;/rule&gt;
+```
+
+🎯 Scenario 4: OS Credential Dumping via LSASS Memory (MITRE T1003.001)
+Objective
+To detect stealthy credential harvesting attempts where attackers dump the lsass.exe process memory using the native comsvcs.dll LOLBin.
+
+🥷 Attack Simulation
+```rundll32.exe C:\windows\System32\comsvcs.dll, MiniDump [LSASS_PID] C:\Users\Public\lsass_dump.dmp full```
+
+🛡️ Detection Engineering
+Sysmon Event ID 1 (Process Create) captures the execution. The custom rule strictly looks for the MiniDump command line argument passed to rundll32.exe.
+
+Custom Wazuh Rule:
+```
+&lt;rule id=&quot;100005&quot; level=&quot;12&quot;&gt;
+    &lt;if_group&gt;sysmon&lt;/if_group&gt;
+    &lt;field name=&quot;win.eventdata.commandLine&quot;&gt;MiniDump&lt;/field&gt;
+    &lt;description&gt;CRITICAL: LSASS Memory Dump Attempt via comsvcs.dll LOLBin (Credential Access - T1003.001)&lt;/description&gt;
+    &lt;mitre&gt;
+      &lt;id&gt;T1003.001&lt;/id&gt;
+    &lt;/mitre&gt;
+  &lt;/rule&gt;
+```
