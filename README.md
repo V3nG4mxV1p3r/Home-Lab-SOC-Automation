@@ -102,7 +102,7 @@ Custom Wazuh Rule (local_rules.xml):
   <img width="770" height="565" alt="alerts_wazuh" src="https://github.com/user-attachments/assets/a8599bf1-491a-4f10-aaf3-304983539e7a" />
 
   <img width="627" height="370" alt="rule_level12" src="https://github.com/user-attachments/assets/1c2d83a1-07af-41e7-8b0a-f43570366cc7" />
-
+<pre>
 🎯 Scenario 3: Privilege Escalation via Windows Services (MITRE T1543.003)
 Objective
 To detect when an attacker uses native Windows tools (sc.exe) to create a persistent, malicious service running with SYSTEM privileges.
@@ -148,3 +148,4 @@ Custom Wazuh Rule:
     &lt;/mitre&gt;
   &lt;/rule&gt;
 ```
+</pre>
