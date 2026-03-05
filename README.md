@@ -74,7 +74,7 @@ I wrote a custom Level 12 rule in Wazuh to immediately flag any `schtasks.exe` e
 **Analyst Insight:**
 By mapping the custom rule to MITRE ATT&CK ID **T1053.005**, the SOC team instantly understands the intent of the attacker (Persistence) without manually deciphering the raw logs.
 
-🎯 Scenario 2: Detecting Ingress Tool Transfer (MITRE T1105) via LOLBins
+# 🎯 Scenario 2: Detecting Ingress Tool Transfer (MITRE T1105) via LOLBins
 Objective
 To detect and alert on malicious file downloads executed via built-in Windows binaries (LOLBins) such as PowerShell, simulating an attacker attempting to bring tools into the compromised environment stealthily.
 
@@ -104,7 +104,7 @@ Custom Wazuh Rule (local_rules.xml):
   <img width="627" height="370" alt="rule_level12" src="https://github.com/user-attachments/assets/1c2d83a1-07af-41e7-8b0a-f43570366cc7" />
 
 
-🎯 Scenario 3: Privilege Escalation via Windows Services (MITRE T1543.003)
+# 🎯 Scenario 3: Privilege Escalation via Windows Services (MITRE T1543.003)
 Objective
 To detect when an attacker uses native Windows tools (sc.exe) to create a persistent, malicious service running with SYSTEM privileges.
 
@@ -130,7 +130,7 @@ Custom Wazuh Rule:
 <img width="911" height="580" alt="windows_update_backdoor" src="https://github.com/user-attachments/assets/b7089bbe-87e9-42df-af3f-488f5b2142d6" />
 
 
-🎯 Scenario 4: OS Credential Dumping via LSASS Memory (MITRE T1003.001)
+# 🎯 Scenario 4: OS Credential Dumping via LSASS Memory (MITRE T1003.001)
 Objective
 To detect stealthy credential harvesting attempts where attackers dump the lsass.exe process memory using the native comsvcs.dll LOLBin.
 
