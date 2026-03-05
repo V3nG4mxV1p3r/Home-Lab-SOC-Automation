@@ -102,7 +102,8 @@ Custom Wazuh Rule (local_rules.xml):
   <img width="770" height="565" alt="alerts_wazuh" src="https://github.com/user-attachments/assets/a8599bf1-491a-4f10-aaf3-304983539e7a" />
 
   <img width="627" height="370" alt="rule_level12" src="https://github.com/user-attachments/assets/1c2d83a1-07af-41e7-8b0a-f43570366cc7" />
-<pre>
+
+
 🎯 Scenario 3: Privilege Escalation via Windows Services (MITRE T1543.003)
 Objective
 To detect when an attacker uses native Windows tools (sc.exe) to create a persistent, malicious service running with SYSTEM privileges.
@@ -126,6 +127,8 @@ Custom Wazuh Rule:
     &lt;/mitre&gt;
   &lt;/rule&gt;
 ```
+<img width="911" height="580" alt="windows_update_backdoor" src="https://github.com/user-attachments/assets/b7089bbe-87e9-42df-af3f-488f5b2142d6" />
+
 
 🎯 Scenario 4: OS Credential Dumping via LSASS Memory (MITRE T1003.001)
 Objective
@@ -148,4 +151,5 @@ Custom Wazuh Rule:
     &lt;/mitre&gt;
   &lt;/rule&gt;
 ```
-</pre>
+<img width="960" height="467" alt="lsass_dump" src="https://github.com/user-attachments/assets/f58c263c-9c44-44fa-86b8-66e2b7f4fc47" />
+
