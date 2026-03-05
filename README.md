@@ -78,11 +78,11 @@ By mapping the custom rule to MITRE ATT&CK ID **T1053.005**, the SOC team instan
 Objective
 To detect and alert on malicious file downloads executed via built-in Windows binaries (LOLBins) such as PowerShell, simulating an attacker attempting to bring tools into the compromised environment stealthily.
 
-🥷 Attack Simulation (Red Team)
+## 🥷 Attack Simulation (Red Team)
 Threat actors often use native tools to evade detection. The following command was executed on the Windows 10 endpoint to bypass execution policies and download a fake payload (svchost_update.exe) to the C:\Users\Public folder:
 ```powershell.exe -ExecutionPolicy Bypass -WindowStyle Hidden -Command "Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/wazuh/wazuh/master/LICENSE' -OutFile 'C:\Users\Public\svchost_update.exe'"```
 
-🛡️ Detection Engineering (Blue Team)
+## 🛡️ Detection Engineering (Blue Team)
 Sysmon was configured to capture Event ID 11 (File Create). The telemetry was forwarded to Wazuh. A custom rule was created to trigger a Critical (Level 12) alert when powershell.exe drops a specific suspicious executable.
 
 Custom Wazuh Rule (local_rules.xml):
@@ -97,7 +97,7 @@ Custom Wazuh Rule (local_rules.xml):
     </mitre>
   </rule>
 ```
-  📸 Evidence of Detection
+  ## 📸 Evidence of Detection
   
   <img width="770" height="565" alt="alerts_wazuh" src="https://github.com/user-attachments/assets/a8599bf1-491a-4f10-aaf3-304983539e7a" />
 
@@ -108,10 +108,10 @@ Custom Wazuh Rule (local_rules.xml):
 Objective
 To detect when an attacker uses native Windows tools (sc.exe) to create a persistent, malicious service running with SYSTEM privileges.
 
-🥷 Attack Simulation
+## 🥷 Attack Simulation
 ```sc.exe create &quot;Windows_Update_Backdoor&quot; binPath= &quot;C:\Users\Public\svchost_update.exe&quot; start= auto obj= &quot;LocalSystem&quot;```
 
-🛡️ Detection Engineering
+## 🛡️ Detection Engineering
 Default SIEM rules may ignore sc.exe to prevent false positives. A custom rule was created to trigger a Critical alert when sc.exe is specifically used to create a service.
 
 Custom Wazuh Rule:
@@ -134,10 +134,10 @@ Custom Wazuh Rule:
 Objective
 To detect stealthy credential harvesting attempts where attackers dump the lsass.exe process memory using the native comsvcs.dll LOLBin.
 
-🥷 Attack Simulation
+## 🥷 Attack Simulation
 ```rundll32.exe C:\windows\System32\comsvcs.dll, MiniDump [LSASS_PID] C:\Users\Public\lsass_dump.dmp full```
 
-🛡️ Detection Engineering
+## 🛡️ Detection Engineering
 Sysmon Event ID 1 (Process Create) captures the execution. The custom rule strictly looks for the MiniDump command line argument passed to rundll32.exe.
 
 Custom Wazuh Rule:
