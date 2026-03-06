@@ -1,0 +1,1 @@
+del /F /Q "C:\Users\Public\lsass_dump.dmp"

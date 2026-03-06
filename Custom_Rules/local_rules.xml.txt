@@ -1,0 +1,23 @@
+<group name="sysmon, custom_rules,">
+
+  <rule id="100004" level="12">
+    <if_group>sysmon</if_group>
+    <field name="win.system.eventID">1</field>
+    <field name="win.eventdata.image">sc\.exe</field>
+    <field name="win.eventdata.commandLine">create</field>
+    <description>CRITICAL: Suspicious Service Creation via SC.EXE (Privilege Escalation - T1543.003)</description>
+    <mitre>
+      <id>T1543.003</id>
+    </mitre>
+  </rule>
+
+  <rule id="100005" level="12">
+    <if_group>sysmon</if_group>
+    <field name="win.eventdata.commandLine">MiniDump</field>
+    <description>CRITICAL: LSASS Memory Dump Attempt via comsvcs.dll LOLBin (Credential Access - T1003.001)</description>
+    <mitre>
+      <id>T1003.001</id>
+    </mitre>
+  </rule>
+
+</group>
