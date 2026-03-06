@@ -181,23 +181,5 @@ Wazuh Manager Configuration (```ossec.conf```):
     <rules_id>100005</rules_id>
 <active-response>
 ```
-
-**Triggered Alert & Sysmon Evidence:**
-*(You can view the full custom XML rules in the [Custom_Rules/local_rules.xml](Custom_Rules/local_rules.xml) file).*
-
-![Windows Update Backdoor Alert](Evidences/windows_update_backdoor.png)
-
-**Triggered Alert Evidence:**
-![LSASS Memory Dump Alert](Evidences/lsass_dump.png)
-
-**Triggered Alert Evidence:**
-![Ingress Tool Transfer Alert](Evidences/MITRE%20T1105_2.png)
-
-**Task Scheduler Alert Evidence:**
-![Scheduled Task Alert](Evidences/MITRE%20ATT&CK.png)
-
-**Brute Force Log Analysis Evidence:**
-![Brute Force Event ID 4625](Evidences/Wazuh-BruteForce-Log-Analysis-EventID4625.png)
-
 # 🏆 Conclusion
 This automated response successfully closes the loop on the attack lifecycle. The moment the ```rundll32.exe``` LOLBin attempts to extract the LSASS memory, the custom rule detects it, and the Active Response module instantly neutralizes the payload.
